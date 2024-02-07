@@ -26,8 +26,7 @@ LT_INIT([static, shared])
 
 # Set installation prefix
 AC_PREFIX_DEFAULT([/usr/local/musl])
-AC_CONFIG_HEADERS([include/config.h])
-AC_CONFIG_SRCDIR([src])
+AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIRS([m4])
 
 # Checks for libraries.

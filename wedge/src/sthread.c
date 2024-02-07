@@ -508,7 +508,11 @@ static int launch_sthread(struct sthread *s, stcb_t cb, void *arg)
 	s->st_state = ST_RUNNING;
 
 	_kstate->ks_current = s;
-	load_cr3((unsigned long) s->st_pgroot | CR3_NOFLUSH | s->st_id);
+	// set breakpoint here
+	asm volatile("int3");
+	load_cr3((unsigned long) s->st_pgroot | CR3_NOFLUSH);
+	printf("load_cr3 finished.\n");
+	asm volatile("int3");
         dune_jump_to_user(&tf);
 	load_cr3((unsigned long) pgroot | CR3_NOFLUSH | 0);
 	_kstate->ks_current = NULL;
@@ -607,9 +611,12 @@ struct sthread *create_new_sthread(sc_t *sc)
 
 	memcpy(s->st_writable, _checkpointed_mem, _checkpointed_size);
 
+	printf("dune_vm_clone is running...\n");
         s->st_pgroot = dune_vm_clone(pgroot);
+	printf("dune_vm_clone finished.\n");
 
 	dune_vm_page_walk(s->st_pgroot, VA_START, VA_END, walk_protect, s);
+	printf("walk_protect finished.\n");
 
 	s->st_walk = 0;
 	while (seg) {
@@ -621,6 +628,7 @@ struct sthread *create_new_sthread(sc_t *sc)
 		seg = seg->s_next;
 	}
 
+	printf("create_new_sthread finished.\n");
 	return s;
 }
 
