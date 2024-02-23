@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include <vmpl/dune.h>
-// #include <vmpl/cpu-x86.h>
 
 static void recover(void)
 {

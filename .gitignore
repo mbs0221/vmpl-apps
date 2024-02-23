@@ -42,3 +42,12 @@ wedge/bench
 wedge/httpd
 wedge/sthread
 wedge/test
+bench/bench_dune
+bench/bench_dune_ring
+bench/bench_linux
+bench/posted_ipi
+test/hello
+test/posted_ipi
+test/test
+test/test_sandbox
+test/timetest

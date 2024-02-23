@@ -510,12 +510,13 @@ static int launch_sthread(struct sthread *s, stcb_t cb, void *arg)
 	_kstate->ks_current = s;
 	// set breakpoint here
 	asm volatile("int3");
-	load_cr3((unsigned long) s->st_pgroot | CR3_NOFLUSH);
+	load_cr3((unsigned long) s->st_pgroot | CR3_NOFLUSH | s->st_id);
 	printf("load_cr3 finished.\n");
 	asm volatile("int3");
         dune_jump_to_user(&tf);
 	load_cr3((unsigned long) pgroot | CR3_NOFLUSH | 0);
 	_kstate->ks_current = NULL;
+    asm volatile("int3");
 
 	return 0;
 }

@@ -5,9 +5,7 @@
 #include <pthread.h>
 #include <sched.h>
 
-#include "libdune/dune.h"
-#include "libdune/cpu-x86.h"
-#include "libdune/local.h"
+#include <vmpl/dune.h>
 
 #define NUM_THREADS 10
 #define TEST_VECTOR 0xF2
@@ -69,7 +67,7 @@ int main(int argc, char *argv[])
 		pthread_attr_init(&attr);
 		CPU_ZERO(&cpus);
 		CPU_SET(i, &cpus);
-		pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpus);
+		// pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpus);
 		pthread_create(&pthreads[i], &attr, t_start, (void *)&ready[i]);
 	}
 

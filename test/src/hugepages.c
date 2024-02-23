@@ -8,7 +8,7 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-#include "libdune/dune.h"
+#include <vmpl/dune.h>
 #include "hugepages.h"
 
 #define MAP_HUGE_SHIFT	26
@@ -24,11 +24,6 @@ static void test(int ok, const char *msg, ...)
 	va_end(ap);
 	errors += ok ? 0 : 1;
 	puts(ok ? " OK" : " FAIL");
-}
-
-static int pte_big(ptent_t pte)
-{
-	return PTE_FLAGS(pte) & PTE_PS;
 }
 
 static int guest_page_order(ptent_t *root, unsigned long addr)

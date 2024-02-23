@@ -8,7 +8,7 @@
 
 static char *mem;
 unsigned long trap_tsc, overhead;
-unsigned long time = 0;
+unsigned long my_time = 0;
 static void prime_memory(void)
 {
 	int i;
@@ -24,7 +24,7 @@ benchmark1_handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
 	ptent_t *pte;
 	int accessed;
 
-	time += rdtscllp() - trap_tsc;
+	my_time += rdtscllp() - trap_tsc;
 
 	dune_vm_lookup(pgroot, (void *) addr, 0, &pte);
 	*pte |= PTE_P | PTE_W | PTE_U | PTE_A | PTE_D;
@@ -113,12 +113,12 @@ static void benchmark_appel1(void)
 		dune_vm_mprotect(pgroot, (void *) MAP_ADDR, PGSIZE * NRPGS, PERM_R);
 
 		synch_tsc();
-		time = 0;
+		my_time = 0;
 		tsc = dune_get_ticks();
 		benchmark1();
 
 		avg_appel1 += rdtscllp() - tsc - overhead;
-		avg_user_fault += (time - overhead * NRPGS) / NRPGS;
+		avg_user_fault += (my_time - overhead * NRPGS) / NRPGS;
 	}
 
 	dune_printf("User fault took %ld cycles\n", avg_user_fault / N);

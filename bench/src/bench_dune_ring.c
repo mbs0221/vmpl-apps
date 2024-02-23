@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <string.h>
 
-#include "libdune/dune.h"
+#include <vmpl/dune.h>
 
 #define N		10000
 #define MAP_ADDR	0x400000000000
