@@ -18,6 +18,7 @@ compile
 config.guess
 config.h.in
 config.h.in~
+config.h
 config.status
 config.sub
 configure
@@ -37,3 +38,7 @@ Makefile
 Makefile.in
 missing
 stamp-h1
+wedge/bench
+wedge/httpd
+wedge/sthread
+wedge/test

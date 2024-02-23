@@ -39,6 +39,8 @@ AC_CONFIG_MACRO_DIRS([m4])
 # TODO: Add additional checks if needed.
 
 AC_CONFIG_FILES([Makefile
+                 bench/Makefile
+                 test/Makefile
                  sandbox/Makefile
                  ufirewall/Makefile
                  wedge/Makefile])
