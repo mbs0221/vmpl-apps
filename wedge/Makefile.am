@@ -7,11 +7,11 @@ AM_LDFLAGS = -L. -lvmpl -lhotcalls -ldict
 
 bin_PROGRAMS = bench httpd sthread
 bench_SOURCES = src/bench.c
-bench_LDADD = -lvmpl -lhotcalls -ldict -lsthread
+bench_LDADD = -lvmpl -lhotcalls -ldict libsthread.la
 httpd_SOURCES = src/httpd.c
-httpd_LDADD = -lvmpl -lhotcalls -ldict -lsthread
+httpd_LDADD = -lvmpl -lhotcalls -ldict libsthread.la
 sthread_SOURCES = src/test.c
-sthread_LDADD = -lvmpl -lhotcalls -ldict -lsthread
+sthread_LDADD = -lvmpl -lhotcalls -ldict libsthread.la
 
 # Add this line to compile sthread as a library
 lib_LTLIBRARIES = libsthread.la

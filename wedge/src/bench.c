@@ -205,7 +205,7 @@ static int setup_mem_cb(const void *arg, ptent_t *pte, void *va)
 
 	*pte = (PTE_ADDR(*pte) + 4096) | PTE_P | PTE_W | PTE_U;
 
-	printf("PTE now %llx\n", *pte);
+	printf("PTE now %lx\n", *pte);
 
 	return 0;
 }
