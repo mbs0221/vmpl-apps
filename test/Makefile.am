@@ -11,6 +11,12 @@ bin_PROGRAMS = hello \
             test_sandbox \
             test_syscall \
             test_hotcalls \
+            test_mmap \
+            test_heap \
+            test_mem \
+            test_brk \
+            test_maps \
+            test_pagemap \
             # hugepages
 
 hello_SOURCES = src/hello.c
@@ -48,5 +54,13 @@ test_syscall_LDADD = $(AM_LDFLAGS)
 test_hotcalls_SOURCES = src/test_hotcalls.c
 test_hotcalls_LDADD = -lvmpl -lhotcalls
 test_hotcalls_LDFLAGS = $(AM_LDFLAGS)
+
+# Test programs without libvmpl
+test_mmap_SOURCES = src/test_mmap.c
+test_heap_SOURCES = src/test_heap.c
+test_mem_SOURCES = src/test_mem.c
+test_brk_SOURCES = src/test_brk.c
+test_maps_SOURCES = src/test_maps.c
+test_pagemap_SOURCES = src/test_pagemap.c
 
 CLEANFILES = *.o test *.d $(bin_PROGRAMS) $(noinst_PROGRAMS)
