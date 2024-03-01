@@ -6,7 +6,6 @@
 #include <sched.h>
 
 #include "bench.h"
-
 #include <vmpl/dune.h>
 
 #define THREAD_CORE 10
@@ -75,9 +74,8 @@ int main(int argc, char *argv[])
 	pthread_attr_init(&attr);
 	CPU_ZERO(&cpus2);
 	CPU_SET(THREAD_2_CORE, &cpus2);
-	// pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpus2);
 	pthread_create(&t2, &attr, t2_start, NULL);
-	pthread_setaffinity_np(&t2, sizeof(cpu_set_t), &cpus2);
+	pthread_setaffinity_np(t2, sizeof(cpu_set_t), &cpus2);
 
 	while (!t2_ready);
 	asm volatile("mfence" ::: "memory");
