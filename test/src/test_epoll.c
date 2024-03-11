@@ -9,6 +9,8 @@
 #include <poll.h>
 #include <sys/epoll.h>
 #include <sys/select.h>
+#include <fcntl.h>
+#include <vmpl/vmpl.h>
 
 #define MAX_EVENTS 5
 
@@ -117,8 +119,8 @@ void test_select() {
     }
 }
 
-
 int main() {
+    VMPL_ENTER;
     test_poll();
     test_epoll();
     test_select();

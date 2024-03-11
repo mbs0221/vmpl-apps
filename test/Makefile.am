@@ -28,6 +28,7 @@ bin_PROGRAMS = hello \
             test_msg \
             test_socket \
             test_epoll \
+            test_aio \
             # hugepages
 
 hello_SOURCES = src/hello.c
@@ -57,5 +58,6 @@ test_shm_SOURCES = src/test_shm.c
 test_msg_SOURCES = src/test_msg.c
 test_socket_SOURCES = src/test_socket.c
 test_epoll_SOURCES = src/test_epoll.c
+test_aio_SOURCES = src/test_aio.c
 
 CLEANFILES = *.o test *.d $(bin_PROGRAMS) $(noinst_PROGRAMS)
