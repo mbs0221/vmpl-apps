@@ -29,4 +29,6 @@ int main()
 		}
 		printf("done waiting\n");
 	}
+
+	return 0;
 }

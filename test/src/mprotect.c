@@ -8,8 +8,10 @@ static uintptr_t fltaddr;
 
 static void handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
 {
+#if CONFIG_VMPL_DEBUG
 	// TODO: causes a crash -- does printf allocate too much stack space?
 	printf("in fault handler: %lx\n", addr);
+#endif
 
 	fltaddr = addr;
 	ptent_t *pte;

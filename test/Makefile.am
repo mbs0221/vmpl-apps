@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign subdir-objects
 AM_CFLAGS = -Wall -g -MD -O2  -I$(srcdir)/include
-AM_LDFLAGS = -lvmpl -lpthread
+AM_LDFLAGS = -ldune -lvmpl -lpthread
 MODULE_LIB = /lib/modules/$(shell uname -r)/build
 
 bin_PROGRAMS = hello \
@@ -17,50 +17,45 @@ bin_PROGRAMS = hello \
             test_brk \
             test_maps \
             test_pagemap \
+            test_mprotect \
+            test_file \
+            test_proc \
+            test_time \
+            test_timer \
+            test_pipe \
+            test_sem \
+            test_shm \
+            test_msg \
+            test_socket \
+            test_epoll \
             # hugepages
 
 hello_SOURCES = src/hello.c
-hello_LDADD = -lvmpl
-hello_LDFLAGS = $(AM_LDFLAGS)
-
 mprotect_SOURCES = src/mprotect.c
-mprotect_LDADD = -lvmpl
-mprotect_LDFLAGS = $(AM_LDFLAGS)
-
 fork_SOURCES = src/fork.c
-fork_LDADD = -lvmpl -lpthread
-fork_LDFLAGS = $(AM_LDFLAGS)
-
 timetest_SOURCES = src/timetest.c
-timetest_LDADD = -lvmpl
-timetest_LDFLAGS = $(AM_LDFLAGS)
-
 test_SOURCES = src/test.c
-test_LDADD = -lvmpl -lpthread
-test_LDFLAGS = $(AM_LDFLAGS)
-
 test_sandbox_SOURCES = src/test_sandbox.c
-test_sandbox_LDFLAGS = -pthread
-test_sandbox_LDADD = $(AM_LDFLAGS)
-
 # hugepages_SOURCES = src/hugepages.c
-# hugepages_LDADD = -lvmpl
-# hugepages_LDFLAGS = $(AM_LDFLAGS)
-
 test_syscall_SOURCES = src/test_syscall.c
-test_syscall_LDFLAGS = -lvmpl
-test_syscall_LDADD = $(AM_LDFLAGS)
-
 test_hotcalls_SOURCES = src/test_hotcalls.c
-test_hotcalls_LDADD = -lvmpl -lhotcalls
-test_hotcalls_LDFLAGS = $(AM_LDFLAGS)
-
-# Test programs without libvmpl
+test_hotcalls_LDFLAGS = $(AM_LDFLAGS) -lhotcalls
 test_mmap_SOURCES = src/test_mmap.c
 test_heap_SOURCES = src/test_heap.c
 test_mem_SOURCES = src/test_mem.c
 test_brk_SOURCES = src/test_brk.c
 test_maps_SOURCES = src/test_maps.c
 test_pagemap_SOURCES = src/test_pagemap.c
+test_mprotect_SOURCES = src/test_mprotect.c
+test_file_SOURCES = src/test_file.c
+test_proc_SOURCES = src/test_proc.c
+test_time_SOURCES = src/test_time.c
+test_timer_SOURCES = src/test_timer.c
+test_pipe_SOURCES = src/test_pipe.c
+test_sem_SOURCES = src/test_sem.c
+test_shm_SOURCES = src/test_shm.c
+test_msg_SOURCES = src/test_msg.c
+test_socket_SOURCES = src/test_socket.c
+test_epoll_SOURCES = src/test_epoll.c
 
 CLEANFILES = *.o test *.d $(bin_PROGRAMS) $(noinst_PROGRAMS)
