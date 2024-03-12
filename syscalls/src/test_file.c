@@ -173,6 +173,7 @@ int main() {
     test_dup();
     test_dup2();
     test_dup3();
+
     printf("Tests passed\n");
     return 0;
 }

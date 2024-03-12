@@ -41,6 +41,7 @@ AC_CONFIG_MACRO_DIRS([m4])
 AC_CONFIG_FILES([Makefile
                  bench/Makefile
                  test/Makefile
+                 syscalls/Makefile
                  sandbox/Makefile
                  ufirewall/Makefile
                  wedge/Makefile])

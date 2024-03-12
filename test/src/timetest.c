@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	printf("Success!\n");
+	printf("Success! t=%ld\n", t);
 	return 0;
 }
 

@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
 
 	dune_printf("syscall: now printing from dune mode\n");
 
-	dune_register_pgflt_handler(pgflt_handler);
+	// dune_register_pgflt_handler(pgflt_handler);
 	dune_register_syscall_handler(syscall_handler);
 
 	dune_printf("syscall: about to call user code\n");
