@@ -36,8 +36,7 @@ static int usm_gettimeofday(struct timeval *tp, void *tzp)
 	if (!_use_vmcall_gettimeofday)
 		return gettimeofday(tp, tzp);
  
-        asm("vmcall\n" : "=a" (ret)
-                       : "a" (SYS_gettimeofday), "D" (tp), "S" (tzp));
+		syscall(SYS_gettimeofday, tp, tzp);
 
         return ret;
 }
