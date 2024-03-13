@@ -146,7 +146,7 @@ static void http_bench(void)
 
 	memset(&s_in, 0, sizeof(s_in));
 	s_in.sin_family      = PF_INET;
-	s_in.sin_port        = htons(80);
+	s_in.sin_port        = htons(18880);
 	s_in.sin_addr.s_addr = inet_addr(ip ? ip : "127.0.0.1");
 
 	if (connect(s, (struct sockaddr*) &s_in, sizeof(s_in)) == -1)
