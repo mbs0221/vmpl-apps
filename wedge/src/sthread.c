@@ -100,7 +100,9 @@ static int walk_recycle(const void *arg, ptent_t *ptep, void *va)
 	if (!(*ptep & PTE_D))
 		return 0;
 
+#ifdef DEBUG
 	printf("Dirty %p\n", va);
+#endif
 
 	memcpy(pa, orig, 4096);
 
@@ -119,7 +121,9 @@ static int walk_recycle_stack(const void *arg, ptent_t *ptep, void *va)
 	if (!(*ptep & PTE_D))
 		return 0;
 
+#ifdef DEBUG
 	printf("Dirty stack %p\n", va);
+#endif
 
 	memset(pa, 0, 4096);
 //	*ptep = *ptep & ~PTE_D;
@@ -182,7 +186,9 @@ static int can_do_sys(struct sthread *st, int sysno)
 		return 1;
 	}
 
+#ifdef DEBUG
 	dune_printf("POS %d sys %d\n", pos, sysno);
+#endif
 
 	if (pos < 0 || pos > (sizeof(sc->sc_sys) / sizeof(*sc->sc_sys)))
 		errx(1, "can_do_sys");
@@ -208,7 +214,9 @@ static void schedule(struct dune_tf *tf)
 	}
 
 	if (s) {
+#ifdef DEBUG
 		dune_printf("Scheduling %d\n", s->st_id);
+#endif
 
 		_kstate->ks_current = s;
 		load_cr3((unsigned long) s->st_pgroot | CR3_NOFLUSH | s->st_id);
@@ -221,7 +229,9 @@ static void schedule(struct dune_tf *tf)
 
 	/* try master */
 	if (!s && tf) {
+#ifdef DEBUG
 		dune_printf("Scheduling master\n");
+#endif
                 dune_ret_from_user(-1);
 		return;
 	}
@@ -243,7 +253,9 @@ static int walk_check_perm(const void *arg, ptent_t *ptep, void *va)
 	if (!(*ptep & PTE_W))
 		return 1;
 
+#ifdef DEBUG
 	dune_printf("Check addr VA %p PA %p\n", va, (void*) PTE_ADDR(*ptep));
+#endif
 
 	if (!s->st_walk) {
 		unsigned long addr = PTE_ADDR(*ptep);
@@ -281,7 +293,9 @@ static void syscall_handler(struct dune_tf *tf)
 	unsigned long *ptr = NULL;
 	unsigned long len = 0;
 
+#ifdef DEBUG
 	dune_printf("SYSCALL %d current %p\n", syscall_num, _kstate->ks_current);
+#endif
 
 	/* can we do the syscall? */
 	if (!can_do_sys(current, syscall_num))
@@ -513,7 +527,10 @@ static int launch_sthread(struct sthread *s, stcb_t cb, void *arg)
 
 	_kstate->ks_current = s;
 	// set breakpoint here
-	load_cr3((unsigned long) s->st_pgroot | CR3_NOFLUSH);
+	load_cr3((unsigned long) s->st_pgroot | CR3_NOFLUSH | s->st_id);
+#ifdef DEBUG
+	printf("launch_sthread: dune_jump_to_user is running...\n");
+#endif
         dune_jump_to_user(&tf);
 	load_cr3((unsigned long) pgroot | CR3_NOFLUSH | 0);
 	_kstate->ks_current = NULL;
