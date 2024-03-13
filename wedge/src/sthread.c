@@ -388,7 +388,9 @@ static void checkpoint_prepare(void)
 	close(fd);
 	buf[rd] = 0;
 
-//	printf("%s\n", buf);
+#ifdef DEBUG
+	printf("%s\n", buf);
+#endif
 
 	p = buf;
 
@@ -403,7 +405,9 @@ static void checkpoint_prepare(void)
 		if (sscanf(p, "%lx-%lx %s ", &start, &end, perm) != 3)
 			err(1, "sscanf()");
 
-//		printf("Start %lx end %lx perm %s\n", start, end, perm);
+#ifdef DEBUG
+		printf("Start %lx end %lx perm %s\n", start, end, perm);
+#endif
 
 		/* XXX */
 		if (strstr(p, "stack"))
@@ -589,7 +593,9 @@ struct sthread *create_new_sthread(sc_t *sc)
 	s->st_id = ++_sthread_id;
 	assert(_sthread_id >= 0);
 
+#ifdef DEBUG
 	printf("Creating a new sthread %d\n", s->st_id);
+#endif
 
 	s->st_next = _kstate->ks_sthreads.st_next;
 	_kstate->ks_sthreads.st_next = s;
@@ -608,12 +614,18 @@ struct sthread *create_new_sthread(sc_t *sc)
 
 	memcpy(s->st_writable, _checkpointed_mem, _checkpointed_size);
 
+#ifdef DEBUG
 	printf("dune_vm_clone is running...\n");
+#endif
         s->st_pgroot = dune_vm_clone(pgroot);
+#ifdef DEBUG
 	printf("dune_vm_clone finished.\n");
+#endif
 
 	dune_vm_page_walk(s->st_pgroot, VA_START, VA_END, walk_protect, s);
+#ifdef DEBUG
 	printf("walk_protect finished.\n");
+#endif
 
 	s->st_walk = 0;
 	while (seg) {
@@ -625,7 +637,9 @@ struct sthread *create_new_sthread(sc_t *sc)
 		seg = seg->s_next;
 	}
 
+#ifdef DEBUG
 	printf("create_new_sthread finished.\n");
+#endif
 	return s;
 }
 

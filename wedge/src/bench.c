@@ -86,7 +86,9 @@ static int benchmark_latency(cb_t cb)
 
 static void *thread(void* a)
 {
-//	printf("In thread\n");
+#ifdef DEBUG
+	printf("In thread\n");
+#endif
 
 	return NULL;
 }
@@ -191,7 +193,9 @@ static void bench_sthreads(void)
 
 static void set_assert(unsigned char *crap, unsigned char old, unsigned char new)
 {
-//	printf("Crap [%p] is %u want %u setting %u\n", crap, *crap, old, new);
+#ifdef DEBUG
+	printf("Crap [%p] is %u want %u setting %u\n", crap, *crap, old, new);
+#endif
 
 	assert(*crap == old);
 
