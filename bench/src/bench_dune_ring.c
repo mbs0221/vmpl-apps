@@ -54,8 +54,9 @@ static int test_pgflt(void)
 
 	asm("movq %%rsp, %0" : "=r"(sp));
 
+	sp = (sp - 10000) & ~0xF; // Align rsp to 16 bytes
 	tf->rip = (unsigned long)&userlevel_pgflt;
-	tf->rsp = sp - 10000;
+	tf->rsp = sp;
 	tf->rflags = 0x02;
 
 	ret = dune_jump_to_user(tf);
@@ -68,6 +69,7 @@ static int test_pgflt(void)
 
 static void userlevel_syscall(void)
 {
+	void *addr;
 	int i;
 	for (i = 0; i < N; i++) {
 		syscall(SYS_gettid);
@@ -100,8 +102,9 @@ static int test_syscall(void)
 
 	asm("movq %%rsp, %0" : "=r"(sp));
 
+	sp = (sp - 10000) & ~0xF; // Align rsp to 16 bytes
 	tf->rip = (unsigned long)&userlevel_syscall;
-	tf->rsp = sp - 10000;
+	tf->rsp = sp;
 	tf->rflags = 0x0;
 
 	tsc = dune_get_ticks();

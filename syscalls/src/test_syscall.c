@@ -35,8 +35,9 @@ static int dune_call_user(void *func)
 		return -ENOMEM;
 
 	asm ("movq %%rsp, %0" : "=r" (sp));
+	sp = (sp - 10000) & ~0xF; // Align rsp to 16 bytes
 	tf->rip = (unsigned long) func;
-	tf->rsp = sp - 10000;
+	tf->rsp = sp;
 	tf->rflags = 0x0;
 
 	ret = dune_jump_to_user(tf);
@@ -121,11 +122,12 @@ static void user_mmap_test()
 }
 
 /* User code with system calls. */
- void user_main()
+void user_main()
 {
 	int ret = syscall(SYS_gettid);
 	assert(ret > 0);
 	dune_printf("syscall: gettid=%d\n", ret);
+	user_mmap_test();
 	dune_ret_from_user(ret);
 }
 
@@ -143,7 +145,7 @@ int main(int argc, char *argv[])
 
 	dune_printf("syscall: now printing from dune mode\n");
 
-	// dune_register_pgflt_handler(pgflt_handler);
+	dune_register_pgflt_handler(pgflt_handler);
 	dune_register_syscall_handler(syscall_handler);
 
 	dune_printf("syscall: about to call user code\n");
