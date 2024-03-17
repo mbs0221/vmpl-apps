@@ -659,7 +659,9 @@ static void syscall_do(struct dune_tf *tf)
 
 static void syscall_handler(struct dune_tf *tf)
 {
-//	printf("Syscall No. %d\n", tf->rax);
+#ifdef DEBUG
+	printf("Syscall No. %d\n", tf->rax);
+#endif
 
 	if (syscall_check_params(tf) == -1)
 		return;

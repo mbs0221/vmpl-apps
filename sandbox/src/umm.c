@@ -14,6 +14,7 @@
 #include <sys/mman.h>
 #include <sys/shm.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #include "sandbox.h"
 
@@ -123,7 +124,9 @@ unsigned long umm_brk(unsigned long brk)
 	if (len == brk_len) {
 		return brk;
 	} else if (len < brk_len) {
-//		printf("freeing heap %lx\n", brk_len - len);
+#ifdef DEBUG
+		printf("freeing heap %lx\n", brk_len - len);
+#endif
 		ret = munmap((void *) (mmap_base + len), brk_len - len);
 		if (ret)
 			return -errno;
@@ -147,7 +150,9 @@ unsigned long umm_map_big(size_t len, int prot)
 	size_t full_len;
 	void *addr;
 
-//	printf("setting up a big page mapping of len %lx\n", len);
+#ifdef DEBUG
+	printf("setting up a big page mapping of len %lx\n", len);
+#endif
 
 	full_len = BIG_PGADDR(len + BIG_PGSIZE - 1) +
 		   BIG_PGOFF(umm_get_map_pos());

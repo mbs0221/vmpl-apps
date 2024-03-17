@@ -39,10 +39,12 @@ static inline bool mem_ref_is_safe(const void *ptr, size_t len)
 	    end <= APP_MAX_ELF_VADDR)
 		return true;
 
+#ifdef DUNE
 	if (len <= APP_MMAP_LEN &&
 	    begin >= mmap_base &&
 	    end < mmap_base + APP_MMAP_LEN)
 		return true;
+#endif
 
 	return false;
 }

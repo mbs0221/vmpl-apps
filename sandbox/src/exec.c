@@ -53,7 +53,9 @@ exec_execev(const char *filename, char *const argv[], char *const envp[])
         int arglen = getlen(argv);
         const char **new_argv = (const char **)malloc(sizeof(char *)*(arglen+4));
 
-        //printf("ELF!\n");
+#ifdef DEBUG
+        printf("ELF!\n");
+#endif
 
         new_argv[0] = sandbox_path;
         new_argv[1] = ld_path;
@@ -61,9 +63,11 @@ exec_execev(const char *filename, char *const argv[], char *const envp[])
             new_argv[i + 2] = argv[i];
         new_argv[arglen + 3] = NULL;
 
-        /*for (i = 0; new_argv[i] != NULL; i++)
+#ifdef DEBUG
+        for (i = 0; new_argv[i] != NULL; i++)
             printf("'%s' ", new_argv[i]);
-        printf("\n");*/
+        printf("\n");
+#endif
 
         int status = fork();
         if (status < 0)
@@ -84,7 +88,9 @@ exec_execev(const char *filename, char *const argv[], char *const envp[])
         int arglen = getlen(argv);
         const char **new_argv = (const char **)malloc(sizeof(char *)*(arglen+7));
 
-        //printf("SHELL!\n");
+#ifdef DEBUG
+        printf("SHELL!\n");
+#endif
 
         // Parse interpreter and arguments.  According to FreeBSD's historical 
         // note in sys/kern/imgact_shell.c the most compatible behavoir is to 
@@ -143,9 +149,11 @@ exec_execev(const char *filename, char *const argv[], char *const envp[])
             new_argv[arglen + 6] = NULL;
         }
 
-        /*for (i = 0; new_argv[i] != NULL; i++)
+#ifdef DEBUG
+        for (i = 0; new_argv[i] != NULL; i++)
             printf("'%s' ", new_argv[i]);
-        printf("\n");*/
+        printf("\n");
+#endif
 
         int status = fork();
         if (status < 0)
@@ -169,8 +177,10 @@ int main(int argc, char *argv[])
 {
     char *const args[] = { NULL };
 
-    //exec_execev("/bin/ls", args, environ);
-    //exec_execev("test.sh", args, environ);
+#ifdef DEBUG
+    exec_execev("/bin/ls", args, environ);
+    exec_execev("test.sh", args, environ);
+#endif
 
     return 0;
 }
