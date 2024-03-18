@@ -27,7 +27,9 @@ static void prime_memory(void)
 
 static void benchmark1_handler(int sn, siginfo_t *si, void *ctx)
 {
-	//	fprintf (stderr, "afault_handler: %x\n", si->si_addr);
+#ifdef DEBUG
+	fprintf (stderr, "afault_handler: %x\n", si->si_addr);
+#endif
 	unsigned long addr = (((unsigned long)si->si_addr) & ~(PGSIZE - 1));
 	time += rdtscllp() - trap_tsc;
 
@@ -47,7 +49,9 @@ static void benchmark1(void)
 
 static void benchmark2_handler(int sn, siginfo_t *si, void *ctx)
 {
-	//	fprintf (stderr, "bfault_handler: %x\n", si->si_addr);
+#ifdef DEBUG
+	fprintf (stderr, "bfault_handler: %x\n", si->si_addr);
+#endif
 	unsigned long addr = (((unsigned long)si->si_addr) & ~(PGSIZE - 1));
 	mprotect((void *)addr, PGSIZE, PROT_READ | PROT_WRITE);
 }
