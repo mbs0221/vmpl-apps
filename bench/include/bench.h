@@ -4,11 +4,19 @@
 
 #define NRPGS	100
 #define N	10000
+#define SYNC_TSC false
 
+#if SYNC_TSC
 static inline void synch_tsc(void)
 {
 	asm volatile("cpuid" : : : "%rax", "%rbx", "%rcx", "%rdx");
 }
+#else
+static inline void synch_tsc(void)
+{
+	asm volatile("mfence" : : : "memory");
+}
+#endif
 
 static inline unsigned long rdtscll(void)
 {

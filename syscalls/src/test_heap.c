@@ -2,10 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
-#include <vmpl/vmpl.h>
 
 int main() {
-    VMPL_ENTER;
     // 申请一块内存，以便获取堆的起始地址
     void *heap_start = sbrk(0);
 

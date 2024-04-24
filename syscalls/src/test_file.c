@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <dirent.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -155,8 +156,134 @@ void test_dup3() {
     close(newfd);
 }
 
-int main() {
-    VMPL_ENTER;
+int test_all() {
+    int fd;
+    ssize_t n;
+    int ret;
+
+    // creat
+    fd = creat("testfile", S_IRUSR | S_IWUSR);
+    if (fd == -1) {
+        return 1;
+    }
+
+    // write (note: write is a low-level system call, fwrite is the portable POSIX function)
+    n = write(fd, "hello", 5);
+    assert(n == 5);
+
+    // fdatasync
+    ret = fdatasync(fd);
+    assert(ret == 0);
+
+    // link
+    ret = link("testfile", "testfile_link");
+    assert(ret == 0);
+
+    // rename
+    rename("testfile_link", "testfile_renamed");
+    assert(ret == 0);
+
+    // mkdir
+    mkdir("testdir", S_IRWXU);
+    assert(ret == 0);
+
+    // chdir
+    chdir("testdir");
+    assert(ret == 0);
+
+    // getcwd
+    char cwd[1024];
+    getcwd(cwd, sizeof(cwd));
+    printf("Current working directory: %s\n", cwd);
+
+    // fchdir
+    fchdir(fd);
+    getcwd(cwd, sizeof(cwd));
+    printf("Current working directory: %s\n", cwd);
+
+    // rmdir
+    chdir("..");
+    rmdir("testdir");
+
+    // truncate
+    n = truncate("testfile_renamed", 0);
+    assert(n == 0);
+
+    // ftruncate
+    n = ftruncate(fd, 0);
+    assert(n == 0);
+
+    // getdents (note: getdents is a low-level system call, readdir is the portable POSIX function)
+    struct dirent *dir;
+    DIR *d = opendir(".");
+    if (d) {
+        while ((dir = readdir(d)) != NULL) {
+            // do something with dir
+            fprintf(stderr, "Found file: %s\n", dir->d_name);
+        }
+        closedir(d);
+    }
+
+    close(fd);
+
+    return 0;
+}
+
+int test_all2() {
+    int fd;
+    int ret;
+
+    // creat
+    fd = creat("testfile", S_IRUSR | S_IWUSR);
+    if (fd == -1) {
+        return 1;
+    }
+
+    // symlink
+    ret = symlink("testfile", "testfile_symlink");
+    assert(ret == 0);
+
+    // readlink
+    char buffer[1024];
+    readlink("testfile_symlink", buffer, sizeof(buffer));
+    printf("Symlink target: %s\n", buffer);
+
+    // chmod
+    ret = chmod("testfile", S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    assert(ret == 0);
+
+    // fchmod
+    ret = fchmod(fd, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
+    assert(ret == 0);
+
+    // chown
+    ret = chown("testfile", getuid(), getgid());
+    assert(ret == 0);
+
+    // fchown
+    ret = fchown(fd, getuid(), getgid());
+    assert(ret == 0);
+
+    // lchown
+    ret = lchown("testfile_symlink", getuid(), getgid());
+    assert(ret == 0);
+
+    // umask
+    ret = umask(0022);
+    printf("Previous umask: %o\n", ret);
+
+    // unlink
+    ret = unlink("testfile_symlink");
+    assert(ret == 0);
+    ret = unlink("testfile");
+    assert(ret == 0);
+
+    close(fd);
+
+    return 0;
+}
+
+int test_loop() {
     // 测试文件操作
     test_fcntl();
     test_flock();
@@ -173,7 +300,19 @@ int main() {
     test_dup();
     test_dup2();
     test_dup3();
+    // 测试所有系统调用
+    test_all();
+    test_all2();
 
-    printf("Tests passed\n");
+    return 0;
+}
+
+int main(int argc, char *argv[]) {
+    // 运行测试
+    for (size_t i = 0; i < 1000000; i++) {
+        test_loop();
+        printf("Test %d passed\n", i);
+    }
+
     return 0;
 }

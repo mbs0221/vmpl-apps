@@ -17,10 +17,12 @@ int main()
 		printf("fork error: %d\n", p);
 		return 1;
 	} else if (p == 0) {
+		// asm volatile("int3");
 		printf("in child\n");
 		usleep(1000 * 1000);
 		printf("done sleeping\n");
 	} else {
+		// asm volatile("int3");
 		usleep(1000);
 		printf("child=%d\n", p);
 		if (waitpid(p, NULL, 0) == -1) {

@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <vmpl/vmpl.h>
 
 void test_aio() {
     // 创建异步IO上下文
@@ -120,7 +119,6 @@ void test_aio_error() {
 }
 
 int main() {
-    VMPL_ENTER;
     // 测试异步IO
     test_aio();
     test_aio_suspend();

@@ -8,7 +8,6 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-#include <vmpl/vmpl.h>
 
 int test_sem()
 {
@@ -46,7 +45,6 @@ int test_sem()
 
 int main()
 {
-    VMPL_ENTER;
     test_sem();
     return 0;
 }

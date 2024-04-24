@@ -14,8 +14,6 @@ int main() {
     } else if (pid == 0) {
         // Child process
         printf("Hello from child process!\n");
-        VMPL_ENTER;
-        printf("Hello from child process after VMPL_ENTER!\n");
     } else {
         // Parent process
         printf("Hello from parent process!\n");

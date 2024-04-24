@@ -7,7 +7,6 @@
 #include <signal.h>
 #include <time.h>
 #include <assert.h>
-#include <vmpl/vmpl.h>
 
 int test_gettime() {
     // 获取当前时间
@@ -17,6 +16,31 @@ int test_gettime() {
         return 1;
     }
     printf("Current time: %ld.%09ld\n", ts.tv_sec, ts.tv_nsec);
+
+    return 0;
+}
+
+int test_clock_getres() {
+    // 获取时钟精度
+    struct timespec res;
+    if (clock_getres(CLOCK_REALTIME, &res) == -1) {
+        perror("clock_getres");
+        return 1;
+    }
+    printf("Clock resolution: %ld.%09ld\n", res.tv_sec, res.tv_nsec);
+
+    return 0;
+}
+
+int test_clock_nanosleep() {
+    // 休眠
+    struct timespec req = {1, 0};
+    struct timespec rem;
+    if (clock_nanosleep(CLOCK_REALTIME, 0, &req, &rem) == -1) {
+        perror("clock_nanosleep");
+        return 1;
+    }
+    printf("Slept for %ld.%09ld\n", rem.tv_sec, rem.tv_nsec);
 
     return 0;
 }
@@ -100,9 +124,14 @@ int test_strptime() {
 }
 
 int main() {
-    VMPL_ENTER;
     int ret = 0;
     ret = test_gettime();
+    assert(ret == 0);
+
+    ret = test_clock_getres();
+    assert(ret == 0);
+
+    ret = test_clock_nanosleep();
     assert(ret == 0);
 
     ret = test_clock();

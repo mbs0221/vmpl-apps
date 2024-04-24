@@ -6,6 +6,7 @@
 #include "bench.h"
 
 #define MAP_ADDR 0x400000000000
+#define FAULT_ADDR 0x500000000000
 
 static char *mem;
 unsigned long trap_tsc, overhead;
@@ -87,17 +88,17 @@ static void benchmark_fault(void)
 {
 	int i;
 	unsigned long ticks;
-	char *fm = dune_mmap(NULL, N * PGSIZE, PROT_READ | PROT_WRITE,
+	char *fm = dune_mmap(FAULT_ADDR, NRPGS * PGSIZE, PROT_READ | PROT_WRITE,
 						 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 
 	synch_tsc();
 	ticks = dune_get_ticks();
-	for (i = 0; i < N; i++) {
+	for (i = 0; i < NRPGS; i++) {
 		fm[i * PGSIZE] = i;
 	}
 
 	dune_printf("Kernel fault took %ld cycles\n",
-				(rdtscllp() - ticks - overhead) / N);
+				(rdtscllp() - ticks - overhead) / NRPGS);
 }
 
 static void benchmark_appel1(void)
