@@ -43,9 +43,9 @@ int main(int argc, char *argv[]) {
     hotcalls_setup(1);
     log_info("setup finish ");
 
-    log_info("Test syscalls before entering vmpl");
+    log_info("Test syscalls before entering vmpl %p", &syscalls_call);
     benchmark(&args, syscalls_call);
-    log_info("Test hotcalls before entering vmpl");
+    log_info("Test hotcalls before entering vmpl %p", &hotcalls_call);
     benchmark(&args, hotcalls_call);
 
     log_info("enter vmpl...");

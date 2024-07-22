@@ -44,8 +44,8 @@ void test_mmap_pages(void *addr, int num_pages) {
 }
 
 int main(int argc, char *argv[]) {
-    const int min_pages = 1 << 14;
-    const int max_pages = 1 << 17;
+    const int min_pages = 1 << 14; // 64MB
+    const int max_pages = 1 << 17; // 512MB
 
     int pages;
 #if 0
