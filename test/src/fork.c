@@ -3,7 +3,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 int main()
 {

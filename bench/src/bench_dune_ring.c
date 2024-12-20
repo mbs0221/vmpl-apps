@@ -5,14 +5,14 @@
 #include <errno.h>
 #include <string.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 #define N		 10000
 #define MAP_ADDR 0x400000000000
 
 static unsigned long tsc;
 
-static void pgflt_handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
+static void pgflt_handler(uintptr_t addr, uint64_t fec, struct pt_regs *tf)
 {
 	ptent_t *pte;
 
@@ -20,7 +20,7 @@ static void pgflt_handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
 	*pte |= PTE_P | PTE_W | PTE_U | PTE_A | PTE_D;
 }
 
-static void syscall_handler1(struct dune_tf *tf)
+static void syscall_handler1(struct pt_regs *tf)
 {
 	dune_ret_from_user(0);
 }
@@ -37,7 +37,7 @@ static int test_pgflt(void)
 {
 	int ret;
 	unsigned long sp;
-	struct dune_tf *tf = malloc(sizeof(struct dune_tf));
+	struct pt_regs *tf = malloc(sizeof(struct pt_regs));
 	if (!tf)
 		return -ENOMEM;
 
@@ -57,7 +57,7 @@ static int test_pgflt(void)
 	sp = (sp - 10000) & ~0xF; // Align rsp to 16 bytes
 	tf->rip = (unsigned long)&userlevel_pgflt;
 	tf->rsp = sp;
-	tf->rflags = 0x02;
+	tf->eflags = 0x02;
 
 	ret = dune_jump_to_user(tf);
 
@@ -76,7 +76,7 @@ static void userlevel_syscall(void)
 	}
 }
 
-static void syscall_handler2(struct dune_tf *tf)
+static void syscall_handler2(struct pt_regs *tf)
 {
 	static int syscall_count = 0;
 
@@ -92,7 +92,7 @@ static int test_syscall(void)
 {
 	int ret;
 	unsigned long sp;
-	struct dune_tf *tf = malloc(sizeof(struct dune_tf));
+	struct pt_regs *tf = malloc(sizeof(struct pt_regs));
 	if (!tf)
 		return -ENOMEM;
 
@@ -105,7 +105,7 @@ static int test_syscall(void)
 	sp = (sp - 10000) & ~0xF; // Align rsp to 16 bytes
 	tf->rip = (unsigned long)&userlevel_syscall;
 	tf->rsp = sp;
-	tf->rflags = 0x0;
+	tf->eflags = 0x0;
 
 	tsc = dune_get_ticks();
 	ret = dune_jump_to_user(tf);

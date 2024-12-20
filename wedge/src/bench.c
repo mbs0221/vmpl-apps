@@ -14,7 +14,7 @@
 #include <sys/mman.h>
 #include <assert.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 #include "sthread.h"
 
 #define NR_REP	100
@@ -296,7 +296,7 @@ static void ctx_switch(void)
 	set_assert(_crap2, 5, 6);
 }
 
-static void syscall_handler(struct dune_tf *tf)
+static void syscall_handler(struct pt_regs *tf)
 {
         int syscall_num = (int) tf->rax;
 

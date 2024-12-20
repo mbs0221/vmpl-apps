@@ -6,7 +6,6 @@ MODULE_LIB = /lib/modules/$(shell uname -r)/build
 bin_PROGRAMS = test_syscall \
             test_hotcalls \
             test_faults \
-            test_crypto \
             test_mmap \
             test_mmap_pages \
             test_mmap_file \
@@ -54,8 +53,6 @@ test_syscall_SOURCES = src/test_syscall.c
 test_hotcalls_SOURCES = src/test_hotcalls.c
 test_hotcalls_LDFLAGS = $(AM_LDFLAGS) -lhotcalls
 test_faults_SOURCES = src/test_faults.c
-test_crypto_SOURCES = src/test_crypto.c
-test_crypto_LDADD = -lwolfssl
 test_mmap_SOURCES = src/test_mmap.c
 test_mmap_pages_SOURCES=src/test_mmap_pages.c
 test_mmap_file_SOURCES=src/test_mmap_file.c

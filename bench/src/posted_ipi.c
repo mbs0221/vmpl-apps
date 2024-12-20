@@ -6,7 +6,7 @@
 #include <sched.h>
 
 #include "bench.h"
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 #define THREAD_CORE 10
 #define THREAD_2_CORE 20

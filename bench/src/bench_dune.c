@@ -2,7 +2,7 @@
 #include <sys/syscall.h>
 #include <sys/mman.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 #include "bench.h"
 
 #define MAP_ADDR 0x400000000000
@@ -20,7 +20,7 @@ static void prime_memory(void)
 	}
 }
 
-static void benchmark1_handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
+static void benchmark1_handler(uintptr_t addr, uint64_t fec, struct pt_regs *tf)
 {
 	ptent_t *pte;
 	int accessed;
@@ -47,7 +47,7 @@ static void benchmark1(void)
 	}
 }
 
-static void benchmark2_handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
+static void benchmark2_handler(uintptr_t addr, uint64_t fec, struct pt_regs *tf)
 {
 	ptent_t *pte;
 

@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <sys/mman.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 static uintptr_t fltaddr;
 
-static void handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
+static void handler(uintptr_t addr, uint64_t fec, struct pt_regs *tf)
 {
 #if CONFIG_VMPL_DEBUG
 	// TODO: causes a crash -- does printf allocate too much stack space?

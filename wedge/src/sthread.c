@@ -10,7 +10,7 @@
 #include <fcntl.h>
 
 #include "sthread.h"
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 #define STACK_SIZE	(4096 * 10)
 #define TAG_SIZE	(4096 * 10)
@@ -27,7 +27,7 @@ struct sthread {
 	void		*st_ret;
 	void		*st_stack;
 	ptent_t		*st_pgroot;
-	struct dune_tf	st_tf;
+	struct pt_regs	st_tf;
 	sc_t		st_sc;
 	unsigned char	*st_writable;
 	unsigned long	st_walk;
@@ -196,7 +196,7 @@ static int can_do_sys(struct sthread *st, int sysno)
 	return sc->sc_sys[pos] & (1 << (sysno % 8));
 }
 
-static void schedule(struct dune_tf *tf)
+static void schedule(struct pt_regs *tf)
 {
 	struct sthread *s = _kstate->ks_sthreads.st_next;
 
@@ -283,7 +283,7 @@ static int has_mem_perm(struct sthread *s, void *ptr, unsigned long len)
 	return rc == 0;
 }
 
-static void syscall_handler(struct dune_tf *tf)
+static void syscall_handler(struct pt_regs *tf)
 {
         int syscall_num = (int) tf->rax;
 	struct sthread *current = _kstate->ks_current;
@@ -513,12 +513,12 @@ static void sthread_trampoline(stcb_t cb, void *arg)
 
 static int launch_sthread(struct sthread *s, stcb_t cb, void *arg)
 {
-	struct dune_tf tf;
+	struct pt_regs tf;
 
         memset(&tf, 0, sizeof(tf));
         tf.rip = (unsigned long) sthread_trampoline;
         tf.rsp = (unsigned long) s->st_stack + STACK_SIZE - 8;
-        tf.rflags = 0x02;
+        tf.eflags = 0x02;
 
         tf.rdi = (unsigned long) cb;
         tf.rsi = (unsigned long) arg;

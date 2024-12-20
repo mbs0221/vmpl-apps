@@ -6,11 +6,11 @@
 #include <errno.h>
 #include <assert.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 #include <vmpl/log.h>
 
 /* Handlers. */
-static void pgflt_handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
+static void pgflt_handler(uintptr_t addr, uint64_t fec, struct pt_regs *tf)
 {
 	ptent_t *pte;
 #if CONFIG_VMPL_DEBUG
@@ -20,7 +20,7 @@ static void pgflt_handler(uintptr_t addr, uint64_t fec, struct dune_tf *tf)
 	*pte |= PTE_P | PTE_W | PTE_U | PTE_A | PTE_D;
 }
 
-static void syscall_handler(struct dune_tf *tf)
+static void syscall_handler(struct pt_regs *tf)
 {
 	log_debug("syscall: caught syscall, num=%ld\n", tf->rax);
 	dune_passthrough_syscall(tf);
@@ -31,14 +31,14 @@ static int dune_call_user(void *func)
 {
 	int ret;
 	unsigned long sp;
-	struct dune_tf *tf = malloc(sizeof(struct dune_tf));
+	struct pt_regs *tf = malloc(sizeof(struct pt_regs));
 	if (!tf)
 		return -ENOMEM;
 
 	asm ("movq %%rsp, %0" : "=r" (sp));
 	tf->rip = (unsigned long) func;
 	tf->rsp = sp - 0x10008;
-	tf->rflags = 0x0;
+	tf->eflags = 0x0;
 
 	// 从这里开始rsp未对齐
 	ret = dune_jump_to_user(tf);

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <vmpl/sys.h>
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 static void recover(void)
 {
@@ -10,7 +10,7 @@ static void recover(void)
 	exit(0);
 }
 
-static void divide_by_zero_handler(struct dune_tf *tf)
+static void divide_by_zero_handler(struct pt_regs *tf)
 {
 	printf("hello: caught divide by zero!\n");
 	tf->rip = (uintptr_t)&recover;

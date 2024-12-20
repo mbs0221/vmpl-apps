@@ -8,7 +8,7 @@
 #include <string.h>
 #include <pthread.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 static int check_dune(void)
 {

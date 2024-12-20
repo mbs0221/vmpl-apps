@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#include <vmpl/dune.h>
+#include <dune/dune.h>
 
 int main(int argc, char *argv[])
 {
