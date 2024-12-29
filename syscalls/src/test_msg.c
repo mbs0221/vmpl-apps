@@ -73,6 +73,7 @@ int test_msg2()
     return 0;
 }
 
+#ifdef __MUSL__
 int on_exit()
 {
     key_t key;
@@ -99,6 +100,29 @@ int on_exit()
 
     return 0;
 }
+#else
+void on_exit_main()
+{
+    int status = EXIT_FAILURE;
+    key_t key = get_key();
+    struct msqid_ds buf;
+
+    if (msgctl(key, IPC_STAT, &buf) == 0) {
+        printf("The message queue is not removed\n");
+        exit(status);
+    }
+
+    if (msgctl(key, IPC_RMID, NULL) < 0) {
+        perror("msgctl");
+        exit(status);
+    }
+
+    if (msgctl(key, IPC_STAT, &buf) == 0) {
+        printf("The message queue is not removed\n");
+        exit(status);
+    }
+}
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -108,7 +132,7 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    atexit(on_exit);
+    atexit(on_exit_main);
     switch (atoi(argv[1])) {
     case 1:
         VMPL_ENTER;
